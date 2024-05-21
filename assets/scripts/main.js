@@ -85,4 +85,30 @@ function initFormHandler() {
 	// B12. TODO - Clear the local storage
 	// B13. TODO - Delete the contents of <main>
 	const form = document.getElementsByTagName('form')[0];
+	form.addEventListener('submit', function(event) {
+		event.preventDefault();
+
+		const data = new FormData(form);
+		const recipe = {};
+		
+		for (const [key, value] of data) {
+			recipe[key] = value;
+		}
+
+		const element = document.createElement("recipe-card");
+		element.data = recipe;
+
+		const main = document.getElementsByTagName('main')[0];
+		main.appendChild(element);
+
+		const recipes = getRecipesFromStorage();
+		recipes.push(recipe);
+		saveRecipesToStorage(recipes);
+	});
+
+	const clearButton = document.getElementsByClassName('danger')[0];
+	clearButton.addEventListener('click', function(event) {
+		localStorage.clear();
+		document.getElementsByTagName('main')[0].innerHTML = '';
+	});
 }
